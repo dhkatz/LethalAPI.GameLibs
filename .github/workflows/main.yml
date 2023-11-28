@@ -16,7 +16,7 @@ jobs:
           path: ${{ github.workspace }}/LethalCompany
       - name: Strip Assemblies
         run: |
-          .\strip-assemblies.bat "${{ github.workspace }}/LethalCompany/Lethal Company.exe"
+          "${{ github.workspace }}\strip-assemblies.bat" "${{ github.workspace }}/LethalCompany/Lethal Company.exe"
       - uses: actions/upload-artifact@v3
         name: Upload Artifacts
         with:
