@@ -34,7 +34,7 @@ jobs:
           path: package/lib
       - uses: NuGet/setup-nuget@v1.0.5
       - name: Pack NuGet Package
-        run: nuget pack package -OutputFileNamesWithoutVersion -OutputDirectory build -Properties "git=https://github.com/${{ github.repository }}.git;name=${{ github.event.repository.name }};author=${{ github.repository_owner }};description=${{ github.event.repository.description }};version=${{ github.event.release.tag_name }}"
+        run: nuget pack package -OutputFileNamesWithoutVersion -OutputDirectory build -Properties "git=https://github.com/${{ github.repository }}.git;name=${{ github.event.repository.name }};author=${{ github.repository_owner }};description=${{ github.event.repository.description }};version=${{ github.event.release.tag_name || github.sha }}"
       - name: Upload NuGet Package Artifact
         uses: actions/upload-artifact@v3
         with:
