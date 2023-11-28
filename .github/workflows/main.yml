@@ -13,7 +13,7 @@ jobs:
           username: ${{ secrets.STEAM_USERNAME }}
           vdf: ${{ secrets.STEAM_VDF }}
           appid: ${{ secrets.STEAM_APP_ID }}
-          path: "${{ github.workspace }}\LethalCompany"
+          path: "${{ github.workspace }}\\LethalCompany"
       - name: Strip Assemblies
         run: "& \"${{ github.workspace }}\\strip-assembiles.bat\" '\"${{ github.workspace }}\\LethalCompany\\Lethal Company.exe\"' -Wait -NoNewWindow"
       - uses: actions/upload-artifact@v3
