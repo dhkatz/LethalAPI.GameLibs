@@ -32,9 +32,11 @@ jobs:
         with:
           name: lib
           path: package/lib
-      - uses: NuGet/setup-nuget@v1.0.5
+      - uses: NuGet/setup-nuget@v1.2.0
+        with:
+          nuget-version: 'latest'
       - name: Pack NuGet Package
-        run: nuget pack package -OutputFileNamesWithoutVersion -OutputDirectory build -Properties "git=https://github.com/${{ github.repository }}.git;name=${{ github.event.repository.name }};author=${{ github.repository_owner }};description=${{ github.event.repository.description }};version=${{ github.run_id }}.0.0-alpha"
+        run: nuget pack package -OutputFileNamesWithoutVersion -OutputDirectory build -Properties "git=https://github.com/${{ github.repository }}.git;name=${{ github.event.repository.name }};author=${{ github.repository_owner }};description=${{ github.event.repository.description }};version=${{ github.run_id }}.0.0"
       - name: Upload NuGet Package Artifact
         uses: actions/upload-artifact@v3
         with:
