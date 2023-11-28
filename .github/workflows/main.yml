@@ -6,16 +6,16 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Download Lethal Company
         uses: dhkatz/steam-download@v1.2.0
         with:
           username: ${{ secrets.STEAM_USERNAME }}
           vdf: ${{ secrets.STEAM_VDF }}
           appid: ${{ secrets.STEAM_APP_ID }}
-          path: ${{ github.workspace }}\LethalCompany
+          path: "${{ github.workspace }}\LethalCompany"
       - name: Strip Assemblies
-        run: Start-Process -FilePath "${{ github.workspace }}\strip-assemblies.bat" -ArgumentList '"${{ github.workspace }}\LethalCompany\Lethal Company.exe"' -Wait -NoNewWindow
+        run: "& \"${{ github.workspace }}\\strip-assembiles.bat\" '\"${{ github.workspace }}\LethalCompany\Lethal Company.exe\"' -Wait -NoNewWindow"
       - uses: actions/upload-artifact@v3
         name: Upload Artifacts
         with:
@@ -28,7 +28,7 @@ jobs:
     # Run only when release is published
     if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
