@@ -1,18 +1,43 @@
 name: Pack and publish nuget
 
-on:
-  push:
-    branches: [main]
-  workflow_dispatch:
+on: push
 
 jobs:
   build:
-    runs-on: windows-2019
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download Lethal Company
+        uses: dhkatz/steam-download@v1.2.0
+        with:
+          username: ${{ secrets.STEAM_USERNAME }}
+          vdf: ${{ secrets.STEAM_VDF }}
+          appid: ${{ secrets.STEAM_APP_ID }}
+          path: ${{ github.workspace }}/LethalCompany
+      - name: Strip Assemblies
+        run: |
+          .\strip-assemblies.bat "${{ github.workspace }}/LethalCompany/Lethal Company.exe"
+      - uses: actions/upload-artifact@v3
+        name: Upload Artifacts
+        with:
+          name: lib
+          if-no-files-found: error
+          path: "${{ github.workspace }}/package/lib/*.dll"
+  publish:
+    needs: build
+    runs-on: windows-latest
+    # Run only when release is published
+    if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
     steps:
       - uses: actions/checkout@v2
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: lib
+          path: package/lib
       - uses: NuGet/setup-nuget@v1.0.5
       - name: Pack nuget
-        run: nuget pack package -OutputFileNamesWithoutVersion -OutputDirectory build -Properties "git=https://github.com/${{ github.repository }}.git;name=${{ github.event.repository.name }};author=${{ github.repository_owner }};description=${{ github.event.repository.description }}"
+        run: nuget pack package -OutputFileNamesWithoutVersion -OutputDirectory build -Properties "git=https://github.com/${{ github.repository }}.git;name=${{ github.event.repository.name }};author=${{ github.repository_owner }};description=${{ github.event.repository.description }};version=${{ github.event.release.tag_name }}"
       - name: Publish nuget
         run: |
           nuget push "build/${{ github.event.repository.name }}.nupkg" -ApiKey ${{ secrets.NUGET_KEY }} -Source https://api.nuget.org/v3/index.json

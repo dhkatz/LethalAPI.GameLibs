@@ -33,5 +33,3 @@ set outPath=%~dp0\package\lib
 
   xcopy "%managedPath%\%%a" "%outPath%\%%a" /y /v
 ))
-
-pause
