@@ -1,4 +1,4 @@
-name: Pack and publish nuget
+name: Build
 
 on: push
 

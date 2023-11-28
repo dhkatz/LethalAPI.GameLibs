@@ -1,8 +1,12 @@
-# Unity Game Libs Nuget Creator
+# LethalAPI.GameLibs
 
-Creates nugets with stripped and publicized libraries for Unity game modding.
+[![Build](https://github.com/dhkatz/LethalAPI.GameLibs/actions/workflows/main.yml/badge.svg)](https://github.com/dhkatz/LethalAPI.GameLibs/actions/workflows/main.yml)
+
+Creates stripped and publicized game libraries for Lethal Company.
 
 If the game gets updated, this package needs to get updated too.
+
+## Introduction
 
 `strip-assembiles.bat` does two things:
 
@@ -11,35 +15,16 @@ If the game gets updated, this package needs to get updated too.
 
 ## Usage
 
-### Nuget account
-
-- Go to [nuget.org](https://nuget.org/).
-- Either log in, or create a new account.
-- [Create a new API key](https://www.nuget.org/account/apikeys) with permissions to push new packages.
-
-### Prepare your repository
-
-- [Create a new repository based on this template](https://github.com/Raicuparta/unity-libs-nuget/generate).
-- Add a secret called `NUGET_KEY` to this repository. Give it the value of the API key you created earlier.
-- Update the repository's name. This will be used as your Nuget ID, so it can't clash with another nuget package on [nuget.org](https://nuget.org/).
-- Update the repository's description. This will be used as the nuget's description too.
-
-### Generate the stripped libraries
+### Generating Modified Assemblies
 
 - Make sure you start off with a clean version of the game files, with no extra/modified dlls.
 - Drag the game's exe and drop it on `strip-assembiles.bat`.
 - Dlls are stripped, publicized, and placed in `package\lib`.
 
-### Updating the Nuget
-
-- Edit the `.nuspec` file, make `<version>` match the game version where these assemblies come from.
-- Push to the default branch.
-- Updating the default branch will trigger a workflow that will pack the dlls and update the NuGet package.
-
-### Publicized assemblies
+### Publicized Assemblies
 
 By default, only `Assembly-CSharp.dll` and `Assembly-CSharp-firstpass.dll` are publicized. All other dlls are stripped only. To publicize other dlls, edit `strip-assemblies.bat` and add the dll names to the `toPublicize` variable.
 
-### Untouched assemblies
+### Untouched Assemblies
 
 By default, every game assembly gets stripped. If there's any assembly you wish to keep in the package in their original state, add the dll names to the `dontTouch` variable.
