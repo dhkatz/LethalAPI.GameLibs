@@ -1,0 +1,42 @@
+name: Publish
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Lethal Company
+        uses: dhkatz/steam-download@v1.2.0
+        with:
+          username: ${{ secrets.STEAM_USERNAME }}
+          vdf: ${{ secrets.STEAM_VDF }}
+          appid: ${{ secrets.STEAM_APP_ID }}
+          path: "${{ github.workspace }}\\LethalCompany"
+      - name: Strip Assemblies
+        run: "& \"${{ github.workspace }}\\strip-assembiles.bat\" '\"${{ github.workspace }}\\LethalCompany\\Lethal Company.exe\"' -Wait -NoNewWindow"
+      - uses: actions/upload-artifact@v3
+        name: Upload Artifacts
+        with:
+          name: lib
+          if-no-files-found: error
+          path: "${{ github.workspace }}/package/lib/*.dll"
+  publish:
+    needs: build
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: lib
+          path: package/lib
+      - uses: NuGet/setup-nuget@v1.0.5
+      - name: Pack nuget
+        run: nuget pack package -OutputFileNamesWithoutVersion -OutputDirectory build -Properties "git=https://github.com/${{ github.repository }}.git;name=${{ github.event.repository.name }};author=${{ github.repository_owner }};description=${{ github.event.repository.description }};version=${{ github.event.release.tag_name }}"
+      - name: Publish nuget
+        run: |
+          nuget push "build/${{ github.event.repository.name }}.nupkg" -ApiKey ${{ secrets.NUGET_KEY }} -Source https://api.nuget.org/v3/index.json
