@@ -1,6 +1,7 @@
 # LethalAPI.GameLibs
 
-[![Build](https://github.com/dhkatz/LethalAPI.GameLibs/actions/workflows/main.yml/badge.svg)](https://github.com/dhkatz/LethalAPI.GameLibs/actions/workflows/main.yml)
+[![Build](https://github.com/dhkatz/LethalAPI.GameLibs/actions/workflows/build.yml/badge.svg)](https://github.com/dhkatz/LethalAPI.GameLibs/actions/workflows/build.yml)
+![Nuget](https://img.shields.io/nuget/v/LethalAPI.GameLibs)
 
 Creates stripped and publicized game libraries for Lethal Company.
 
